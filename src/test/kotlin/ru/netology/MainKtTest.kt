@@ -13,7 +13,7 @@ class MainKtTest {
         val amount = 10_000_000
         val expectedResult = 75_000
         //Act
-        val result = CalcVisaMir(
+        val result = calcVisaMir(
             monthAmount = monthAmount,
             amount = amount,
         )
@@ -28,7 +28,7 @@ class MainKtTest {
         val amount = 100_000
         val expectedResult = 3_500
         //Act
-        val result = CalcVisaMir(
+        val result = calcVisaMir(
             monthAmount = monthAmount,
             amount = amount,
         )
@@ -43,7 +43,7 @@ class MainKtTest {
         val amount = 10
         val expectedResult = -1
         //Act
-        val result = CalcVisaMir(
+        val result = calcVisaMir(
             monthAmount = monthAmount,
             amount = amount,
         )
@@ -58,7 +58,7 @@ class MainKtTest {
         val amount = 15_000_100
         val expectedResult = -1
         //Act
-        val result = CalcVisaMir(
+        val result = calcVisaMir(
             monthAmount = monthAmount,
             amount = amount,
         )
@@ -222,13 +222,99 @@ class MainKtTest {
         assertEquals(expectedResult, result.toInt())
     }
 
+    @Test
+    fun calcFeeMaestro() {
+        //Arrange
+        val nameCardAccount = "Maestro"
+        val monthAmount = 0
+        val amount = 1_500_100
+        val expectedResult = 0
+        //Act
+        val result = calcFee(
+            nameCardAccount = nameCardAccount,
+            monthAmount = monthAmount,
+            amount = amount,
+        )
+        //Assert
+        assertEquals(expectedResult, result.toInt())
+    }
 
+    @Test
+    fun calcFeeVKPay() {
+        //Arrange
+        val nameCardAccount = "VKPay"
+        val monthAmount = 0
+        val amount = 1_400_000
+        val expectedResult = 0
+        //Act
+        val result = calcFee(
+            nameCardAccount = nameCardAccount,
+            monthAmount = monthAmount,
+            amount = amount,
+        )
+        //Assert
+        assertEquals(expectedResult, result.toInt())
+    }
 
+    @Test
+    fun calcFeeWrongNameCardAccount() {
+        //Arrange
+        val nameCardAccount = "WrongNameCardAccount"
+        val monthAmount = 0
+        val amount = 1_400_000
+        val expectedResult = -2
+        //Act
+        val result = calcFee(
+            nameCardAccount = nameCardAccount,
+            monthAmount = monthAmount,
+            amount = amount,
+        )
+        //Assert
+        assertEquals(expectedResult, result.toInt())
+    }
+
+    @Test
+    fun outputPrintResultsExceedingLimit() {
+        //Arrange
+        val fee = -1
+        val expectedResult = println("\n\t\tОперация невозможна. \nПричина - превышение лимита (дневного и/или месячного). " +
+                "\nПопробуйте уменьшить сумму транзакции.")
+        //Act
+        val result = printResults(
+            fee = fee,
+        )
+        //Assert
+        assertEquals(expectedResult, result)
+    }
+
+    @Test
+    fun outputPrintResultsInvalidCardAccount() {
+        //Arrange
+        val fee = -2
+        val expectedResult = println("\n\tОперация невозможна - указана неверная карта или счет.")
+        //Act
+        val result = printResults(
+            fee = fee,
+        )
+        //Assert
+        assertEquals(expectedResult, result)
+    }
+
+    @Test
+    fun outputPrintResultsCorrectionFee() {
+        //Arrange
+        val fee = 30_000
+        val expectedResult = println("\n\tКомиссия к оплате: ${fee / 100}руб. ${fee % 100}коп.")
+        //Act
+        val result = printResults(
+            fee = fee,
+        )
+        //Assert
+        assertEquals(expectedResult, result)
+    }
 
 
 }
-
-
 
 
 
