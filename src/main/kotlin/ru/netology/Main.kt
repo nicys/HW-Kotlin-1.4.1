@@ -18,21 +18,21 @@ const val MONTH_LIMIT_ACC = 4_000_000
 const val DAY_LIMIT_ACC = 1_500_000
 
 fun main(args: Array<String>) {
-    val amountFee = calcFee(amount = 10_000_000)
+    val amountFee = calcFee(amount = 1_000_000)
     val fee = Math.round(amountFee).toInt()
     printResults(fee)
 }
 
-fun calcFee(nameCardAccount: String = "MasterCard", monthAmount: Int = 0, amount: Int): Double {
+fun calcFee(nameCardAccount: String = "VKPay", monthAmount: Int = 0, amount: Int): Double {
     return when (nameCardAccount) {
-        "Visa", "MIR" -> CalcVisaMir(monthAmount, amount)
+        "Visa", "MIR" -> calcVisaMir(monthAmount, amount)
         "MasterCard", "Maestro" -> calcMasterMaestro(monthAmount, amount)
         "VKPay" -> calcVkPay(monthAmount, amount)
         else -> INVALID_CARD_ACCOUNT
     }
 }
 
-fun CalcVisaMir(monthAmount: Int = 0, amount: Int): Double {
+fun calcVisaMir(monthAmount: Int, amount: Int): Double {
     return if(monthAmount + amount > MONTH_LIMIT_CARD || amount > DAY_LIMIT_CARD) {
         EXCEED_LIMIT
     } else {
@@ -40,7 +40,7 @@ fun CalcVisaMir(monthAmount: Int = 0, amount: Int): Double {
     }
 }
 
-fun calcMasterMaestro(monthAmount: Int = 0, amount: Int): Double {
+fun calcMasterMaestro(monthAmount: Int, amount: Int): Double {
     return if(monthAmount + amount > MONTH_LIMIT_CARD || amount > DAY_LIMIT_CARD) {
         EXCEED_LIMIT
     } else {
@@ -48,7 +48,7 @@ fun calcMasterMaestro(monthAmount: Int = 0, amount: Int): Double {
     }
 }
 
-fun calcVkPay(monthAmount: Int = 0, amount: Int): Double {
+fun calcVkPay(monthAmount: Int, amount: Int): Double {
     return if(monthAmount + amount > MONTH_LIMIT_ACC || amount > DAY_LIMIT_ACC) {
         EXCEED_LIMIT
     } else {
